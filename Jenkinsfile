@@ -6,19 +6,19 @@ pipeline {
                 echo 'Hello World'
             }
         }
-        // stage('semgrep') {
-        //     agent { label 'alpine' } 
-        //     steps {
-        //         sh '''
-        //             apk add --no-cache python3 py3-pip py3-virtualenv
-        //             python3 -m venv myvenv
-        //             . myvenv/bin/activate
-        //             pip install semgrep
-        //             semgrep --config=auto . --json > k-semgrep.json
-        //         '''
-        //         archiveArtifacts artifacts: 'k-semgrep.json', allowEmptyArchive: true
-        //   }
-        // }
+        stage('semgrep') {
+            agent { label 'alpine' } 
+            steps {
+                sh '''
+                    apk add --no-cache python3 py3-pip py3-virtualenv
+                    python3 -m venv myvenv
+                    . myvenv/bin/activate
+                    pip install semgrep
+                    semgrep --config=auto . --json > k-semgrep.json
+                '''
+                archiveArtifacts artifacts: 'k-semgrep.json', allowEmptyArchive: true
+          }
+        }
         
             // stage('zap') {
             //     agent { label 'alpine' } 
@@ -36,20 +36,20 @@ pipeline {
             //         archiveArtifacts allowEmptyArchive: true, artifacts: 'zapout.json'
             //     }
             // }
-                stage('trivy') {
-                    agent { label 'dind' }
-                    steps {
-                        sh '''
-                            mkdir report/
-                            docker pull aquasec/trivy:latest
-                            docker run -v ./test:/test aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /test/trivyout.json
-                            pwd
-                            ls -l
-                            find . -name "*.json"
-                            '''
-                      archiveArtifacts allowEmptyArchive: true, artifacts: 'test/trivyout.json', caseSensitive: false, defaultExcludes: false, followSymlinks: false
-                    }
-                }
+                // stage('trivy') {
+                //     agent { label 'dind' }
+                //     steps {
+                //         sh '''
+                //             mkdir report/
+                //             docker pull aquasec/trivy:latest
+                //             docker run -v ./test:/test aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /test/trivyout.json
+                //             pwd
+                //             ls -l
+                //             find . -name "*.json"
+                //             '''
+                //       archiveArtifacts allowEmptyArchive: true, artifacts: 'test/trivyout.json', caseSensitive: false, defaultExcludes: false, followSymlinks: false
+                //     }
+                // }
 
         
                 // stage('DT') {
@@ -92,7 +92,33 @@ pipeline {
                 //         }
                 //     }
                 // }
-
-                           
+               
+        
+                stage('VM') {
+                    steps {
+                        script {
+                            sh '''
+                               curl -X 'POST' -kL 'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
+                               -H 'accept: application/json' \
+                               -H 'X-CSRFTOKEN: xlKPcsKGE3OcopuNWpTOKtfzLIS06FRrKbeiG7FMzOjnVU8tiGWJdmqGewocICl1' \
+                               -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
+                               -H 'Content-Type: multipart/form-data' \
+                               -F 'active=true' \
+                               -F 'verified=true' \
+                               -F 'deduplication_on_engagement=true' \
+                               -F 'minimum_severity=High' \
+                               -F 'scan_date=2024-08-31' \
+                               -F 'engagement_end_date=2024-08-31' \
+                               -F 'group_by=component_name' \
+                               -F 'tags=exam_ks' \
+                               -F 'product_name=kanivets_s' \
+                               -F 'file=@k-semgrep.json;type=application/json' \
+                               -F 'auto_create_context=true' \
+                               -F 'scan_type=Semgrep JSON Report' \
+                               -F 'engagement=1'
+                               '''
+                        }
+                    }
+                }
     }
 }
