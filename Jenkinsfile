@@ -16,6 +16,20 @@ pipeline {
                     pip install semgrep
                     semgrep --config=auto . --json > semgrep.json
                 '''
+                    sh '''
+                        curl --insecure -X 'POST' \
+                            'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
+                            -H 'accept: application/json' \
+                            -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
+                            -H 'Content-Type: multipart/form-data' \
+                            -F 'active=true' \
+                            -F 'verified=true' \
+                            -F 'minimum_severity=Info' \
+                            -F 'product_name=skanivets' \
+                            -F 'file=@semgrep.json;type=application/json' \
+                            -F 'auto_create_context=true' \
+                            -F 'scan_type=Semgrep JSON Report' \
+                       '''
                 archiveArtifacts artifacts: 'semgrep.json', allowEmptyArchive: true
           }
         }
@@ -94,26 +108,26 @@ pipeline {
                 // }
                
         
-                stage('VM') {
-                    steps {
-                        script {
-                            sh '''
-                                curl --insecure -X 'POST' \
-                                    'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
-                                    -H 'accept: application/json' \
-                                    -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
-                                    -H 'Content-Type: multipart/form-data' \
-                                    -F 'active=true' \
-                                    -F 'verified=true' \
-                                    -F 'minimum_severity=Info' \
-                                    -F 'product_name=skanivets' \
-                                    -F 'file=@semgrep.json;type=application/json' \
-                                    -F 'auto_create_context=true' \
-                                    -F 'scan_type=Semgrep JSON Report' \
-                               '''
-                        }
-                    }
-                }
+                // stage('VM') {
+                //     steps {
+                //         script {
+                //             sh '''
+                //                 curl --insecure -X 'POST' \
+                //                     'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
+                //                     -H 'accept: application/json' \
+                //                     -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
+                //                     -H 'Content-Type: multipart/form-data' \
+                //                     -F 'active=true' \
+                //                     -F 'verified=true' \
+                //                     -F 'minimum_severity=Info' \
+                //                     -F 'product_name=skanivets' \
+                //                     -F 'file=@semgrep.json;type=application/json' \
+                //                     -F 'auto_create_context=true' \
+                //                     -F 'scan_type=Semgrep JSON Report' \
+                //                '''
+                //         }
+                //     }
+                // }
 
                 // stage('VM2') {
                 //     steps {
