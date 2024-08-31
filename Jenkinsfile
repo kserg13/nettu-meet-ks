@@ -41,13 +41,13 @@ pipeline {
                     steps {
                         sh '''
                             mkdir report/
-
-                            docker run aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /report/trivy.json
+                            docker pull aquasec/trivy:latest
+                            docker run -v /test:/test aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /test/trivy.json
                             pwd
                             ls -l
                             find . -name "*.json"
                             '''
-                      archiveArtifacts allowEmptyArchive: true, artifacts: 'results.json', caseSensitive: false, defaultExcludes: false, followSymlinks: false
+                      archiveArtifacts allowEmptyArchive: true, artifacts: 'test/trivy.json', caseSensitive: false, defaultExcludes: false, followSymlinks: false
                     }
                 }
                             
