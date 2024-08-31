@@ -59,7 +59,7 @@ pipeline {
                             syft dir:$(pwd) -o cyclonedx-json > sbom.json
                             '''
                             sh '''
-                                curl -k -X 'PUT' 'https://s410-exam.cyber-ed.space:8081'/api/v1/project' \
+                                curl -k -X 'PUT' 'https://s410-exam.cyber-ed.space:8081/api/v1/project' \
                                      -H 'Content-Type: application/json' \
                                      -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
                                      -d '{
