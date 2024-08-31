@@ -176,7 +176,8 @@ pipeline {
             unstash "reptrivy"
             // unstash "repzap"
             sh '''
-              apt update && install -y jq
+              sudo apt-get update
+              sudo apt-get install -y jq
               c=$(cat trivy.json | jq | grep -iE "\"severity\": \"CRITICAL" | wc -l )
               h=$(cat trivy.json | jq | grep -iE "\"severity\": \"HIGH" | wc -l)
               if [ $c -ge 1 ] || [ $h -ge 1 ]; then
