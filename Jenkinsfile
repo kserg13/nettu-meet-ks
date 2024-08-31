@@ -26,8 +26,8 @@ pipeline {
                         apk add --no-cache openjdk11-jre-headless wget unzip
                         wget https://github.com/zaproxy/zaproxy/releases/download/w2024-08-27/ZAP_WEEKLY_D-2024-08-27.zip
                         unzip ZAP_WEEKLY_D-2024-08-27.zip -d zap
-                        cd /zap/ZAP_D-2024-08-27/
-                        zap.sh -cmd -quickurl https://s410-exam.cyber-ed.space:8084 -quickout zapout.json
+                        pwd
+                        zap/ZAP_D-2024-08-27/zap.sh -cmd -quickurl https://s410-exam.cyber-ed.space:8084 -quickout /home/jenkins/workspace/skanivets_exam/zapout.json
                         pwd
                         ls -l
                         find . -name "*.json"
