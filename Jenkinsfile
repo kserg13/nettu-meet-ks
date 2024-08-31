@@ -31,7 +31,7 @@ pipeline {
                             -F 'scan_type=Semgrep JSON Report' \
                        '''
                 archiveArtifacts artifacts: 'semgrep.json', allowEmptyArchive: true
-                    stash name: 'repsemgrep', includes: 'semgrep.json'
+                stash name: 'repsemgrep', includes: 'semgrep.json'
           }
         }
         
