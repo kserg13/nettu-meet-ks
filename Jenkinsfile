@@ -93,6 +93,7 @@ pipeline {
                                 -o vulners.json
                                 '''
                             archiveArtifacts artifacts: 'sbom.json', allowEmptyArchive: true
+                            archiveArtifacts artifacts: 'vulners.json', allowEmptyArchive: true
                         }
                     }
                 }
