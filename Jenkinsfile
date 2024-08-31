@@ -63,9 +63,9 @@ pipeline {
                                      -H 'Content-Type: application/json' \
                                      -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
                                      -d '{
-                                           'name': kanivets_s,
-                                           'version': 1.0.0,
-                                           'description': exam-project
+                                           'name: kanivets_s',
+                                           'version: 1.0.0',
+                                           'description: exam-project'
                                          }'
                                 '''
                             // sh '''
