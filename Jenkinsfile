@@ -36,20 +36,52 @@ pipeline {
             //         archiveArtifacts allowEmptyArchive: true, artifacts: 'zapout.json'
             //     }
             // }
-                stage('trivy') {
-                    agent { label 'dind' }
+                // stage('trivy') {
+                //     agent { label 'dind' }
+                //     steps {
+                //         sh '''
+                //             mkdir report/
+                //             docker pull aquasec/trivy:latest
+                //             docker run -v ./test:/test aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /test/trivyout.json
+                //             docker run --rm -v $(pwd):/test aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /test/trivyout.json
+                //             pwd
+                //             ls -l
+                //             find . -name "*.json"
+                //             '''
+                //       archiveArtifacts allowEmptyArchive: true, artifacts: 'test/trivyout.json', caseSensitive: false, defaultExcludes: false, followSymlinks: false
+                //     }
+                // }
+                stage('DT') {
                     steps {
-                        sh '''
-                            mkdir report/
-                            docker pull aquasec/trivy:latest
-                            docker run --rm -v $(pwd):/test aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /test/trivy.json
-                            pwd
-                            ls -l
-                            find . -name "*.json"
+                        script {
+                            sh '''
+                            curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+                            syft dir:$(pwd) -o cyclonedx-json > sbom.json
                             '''
-                      archiveArtifacts allowEmptyArchive: true, artifacts: 'test/trivy.json', caseSensitive: false, defaultExcludes: false, followSymlinks: false
+                            sh '''
+                                curl -k -X "PUT" "'https://s410-exam.cyber-ed.space:8081'/api/v1/project" \
+                                     -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
+                                     -H 'Content-Type: application/json' \
+                                     -d '{
+                                           "name": "'kanivets_s'",
+                                           "version": "'1.0.0'",
+                                           "description": "'exam-project'"
+                                         }'
+                                '''
+                            sh '''
+                                curl -k -X "PUT" "https://s410-exam.cyber-ed.space:8081/api/v1/bom" \
+                                -H 'Content-Type: application/json'\
+                                -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
+                                -F "autoCreate=true" \
+                                -F "projectName='kanivets_s'" \
+                                -F "projectVersion='1.0.0'" \
+                                -d @sbom.json
+                                '''
+                            archiveArtifacts artifacts: 'sbom.json', allowEmptyArchive: true
+                        }
                     }
                 }
-                            
+
+                           
     }
 }
