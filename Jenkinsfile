@@ -1,8 +1,8 @@
 pipeline {
     agent any
     stages {
-        stage('semgrep') {
-            agent { label 'alpine' } 
+        // stage('semgrep') {
+        //     agent { label 'alpine' } 
         //     steps {
         //         sh '''
         //             apk add --no-cache python3 py3-pip py3-virtualenv
@@ -192,6 +192,5 @@ pipeline {
             '''
           }
       }
-        
     }
 }
