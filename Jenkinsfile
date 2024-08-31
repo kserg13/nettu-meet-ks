@@ -40,7 +40,8 @@ pipeline {
                     agent { label 'dind' }
                     steps {
                         sh '''
-                            docker run aquasec/trivy --format json --output /report/trivyout.json repo https://github.com/kserg13/nettu-meet-ks
+                            mkdir report/
+                            docker run aquasec/trivy --format json --output ../report/trivyout.json repo https://github.com/kserg13/nettu-meet-ks
                             pwd
                             ls -l
                             find . -name "*.json"
