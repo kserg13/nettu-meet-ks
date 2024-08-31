@@ -36,67 +36,62 @@ pipeline {
             //         archiveArtifacts allowEmptyArchive: true, artifacts: 'zapout.json'
             //     }
             // }
-                // stage('trivy') {
-                //     agent { label 'dind' }
-                //     steps {
-                //         sh '''
-                //             mkdir report/
-                //             docker pull aquasec/trivy:latest
-                //             docker run -v ./test:/test aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /test/trivyout.json
-                //             docker run --rm -v $(pwd):/test aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /test/trivyout.json
-                //             pwd
-                //             ls -l
-                //             find . -name "*.json"
-                //             '''
-                //       archiveArtifacts allowEmptyArchive: true, artifacts: 'test/trivyout.json', caseSensitive: false, defaultExcludes: false, followSymlinks: false
-                //     }
-                // }
-                stage('DT') {
+                stage('trivy') {
+                    agent { label 'dind' }
                     steps {
-                        script {
-                            sh '''
-                            curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-                            syft dir:$(pwd) -o cyclonedx-json > sbom.json
+                        sh '''
+                            mkdir report/
+                            docker pull aquasec/trivy:latest
+                            docker run -v ./test:/test aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /test/trivyout.json
+                            pwd
+                            ls -l
+                            find . -name "*.json"
                             '''
-                            sh '''
-                                curl -k -X 'PUT' 'https://s410-exam.cyber-ed.space:8081/api/v1/project' \
-                                     -H 'accept: application/json' \
-                                     -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
-                                     -H 'Content-Type: application/json' \
-                                     -d '{
-                                           "name": "kanivets_s",
-                                           "version": "1.0.0",
-                                           "description": "exam-project"
-                                         }'
-                                '''
-                            // sh '''
-                            //     curl -k -X 'PUT' 'https://s410-exam.cyber-ed.space:8081/api/v1/bom' \
-                            //     -H 'Content-Type: application/json'\
-                            //     -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
-                            //     -d @sbom.json
-                            //     '''
-                            sh '''
-                                curl -k -X 'POST' 'https://s410-exam.cyber-ed.space:8081/api/v1/bom' \
-                                -H 'accept: application/json' \
-                                -H 'Content-Type: multipart/form-data'\
-                                -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
-                                -F 'projectName=kanivets_s' \
-                                -F 'projectVersion=1.0.0' \
-                                -F 'project=bd056b21-93ad-447e-ba6d-f1104daedfcd' \
-                                -F 'bom=@sbom.json'
-                                '''
-                            sh '''
-                                curl -k -X 'GET' 'https://s410-exam.cyber-ed.space:8081/api/v1/finding/project/bd056b21-93ad-447e-ba6d-f1104daedfcd' \
-                                -H 'accept: application/json' \
-                                -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
-                                -H 'Content-Type: application/json' \
-                                -o vulners.json
-                                '''
-                            archiveArtifacts artifacts: 'sbom.json', allowEmptyArchive: true
-                            archiveArtifacts artifacts: 'vulners.json', allowEmptyArchive: true
-                        }
+                      archiveArtifacts allowEmptyArchive: true, artifacts: 'test/trivyout.json', caseSensitive: false, defaultExcludes: false, followSymlinks: false
                     }
                 }
+
+        
+                // stage('DT') {
+                //     steps {
+                //         script {
+                //             sh '''
+                //             curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+                //             syft dir:$(pwd) -o cyclonedx-json > sbom.json
+                //             '''
+                //             sh '''
+                //                 curl -k -X 'PUT' 'https://s410-exam.cyber-ed.space:8081/api/v1/project' \
+                //                      -H 'accept: application/json' \
+                //                      -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
+                //                      -H 'Content-Type: application/json' \
+                //                      -d '{
+                //                            "name": "kanivets_s",
+                //                            "version": "1.0.0",
+                //                            "description": "exam-project"
+                //                          }'
+                //                 '''
+                //             sh '''
+                //                 curl -k -X 'POST' 'https://s410-exam.cyber-ed.space:8081/api/v1/bom' \
+                //                 -H 'accept: application/json' \
+                //                 -H 'Content-Type: multipart/form-data'\
+                //                 -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
+                //                 -F 'projectName=kanivets_s' \
+                //                 -F 'projectVersion=1.0.0' \
+                //                 -F 'project=bd056b21-93ad-447e-ba6d-f1104daedfcd' \
+                //                 -F 'bom=@sbom.json'
+                //                 '''
+                //             sh '''
+                //                 curl -k -X 'GET' 'https://s410-exam.cyber-ed.space:8081/api/v1/finding/project/bd056b21-93ad-447e-ba6d-f1104daedfcd' \
+                //                 -H 'accept: application/json' \
+                //                 -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
+                //                 -H 'Content-Type: application/json' \
+                //                 -o vulners.json
+                //                 '''
+                //             archiveArtifacts artifacts: 'sbom.json', allowEmptyArchive: true
+                //             archiveArtifacts artifacts: 'vulners.json', allowEmptyArchive: true
+                //         }
+                //     }
+                // }
 
                            
     }
