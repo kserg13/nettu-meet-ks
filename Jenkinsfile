@@ -14,9 +14,9 @@ pipeline {
                     python3 -m venv myvenv
                     . myvenv/bin/activate
                     pip install semgrep
-                    semgrep --config=auto . --json > k-semgrep.json
+                    semgrep --config=auto . --json > semgrep.json
                 '''
-                archiveArtifacts artifacts: 'ksemgrep.json', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'semgrep.json', allowEmptyArchive: true
           }
         }
         
@@ -118,7 +118,7 @@ pipeline {
                     steps {
                         script {
                             sh '''
-                            curl -X 'POST' -kL 'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' -H 'accept: application/json' -H 'X-CSRFTOKEN: xlKPcsKGE3OcopuNWpTOKtfzLIS06FRrKbeiG7FMzOjnVU8tiGWJdmqGewocICl1' -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' -H 'Content-Type: multipart/form-data' -F 'active=true' -F 'verified=true' -F'deduplication_on_engagement=true' -F 'minimum_severity=High' -F 'scan_date=2024-08-31' -F 'engagement_end_date=2024-08-31' -F 'group_by=component_name' -F 'tags=' -F 'product_name=ks13' -F 'file=@ksemgrep.json;type=application/json' -F 'auto_create_context=true' -F 'scan_type=Semgrep JSON Report' -F 'engagement=113'
+                            curl -X 'POST' -kL 'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' -H 'accept: application/json' -H 'X-CSRFTOKEN: xlKPcsKGE3OcopuNWpTOKtfzLIS06FRrKbeiG7FMzOjnVU8tiGWJdmqGewocICl1' -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' -H 'Content-Type: multipart/form-data' -F 'active=true' -F 'verified=true' -F'deduplication_on_engagement=true' -F 'minimum_severity=High' -F 'scan_date=2024-08-31' -F 'engagement_end_date=2024-08-31' -F 'group_by=component_name' -F 'tags=' -F 'product_name=ks13' -F 'file=@semgrep.json;type=application/json' -F 'auto_create_context=true' -F 'scan_type=Semgrep JSON Report' -F 'engagement=113'
                             '''
                         }
                     }
