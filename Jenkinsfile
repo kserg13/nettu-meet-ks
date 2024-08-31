@@ -41,12 +41,12 @@ pipeline {
                     steps {
                         sh '''
                             mkdir report/
-                            docker run aquasec/trivy --format json --output /home/jenkins/workspace/skanivets_exam/trivyout.json repo https://github.com/kserg13/nettu-meet-ks
+                            docker run aquasec/trivy --format json --output trivyout.json repo https://github.com/kserg13/nettu-meet-ks
                             pwd
                             ls -l
                             find . -name "*.json"
                             '''
-                      //  archiveArtifacts allowEmptyArchive: true, artifacts: 'report/trivyout.json'
+                      archiveArtifacts allowEmptyArchive: true, artifacts: 'trivyout.json', caseSensitive: false, defaultExcludes: false, followSymlinks: false
                     }
                 }
                             
