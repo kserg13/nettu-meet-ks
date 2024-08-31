@@ -65,7 +65,7 @@ pipeline {
                                      -H 'Content-Type: application/json' \
                                      -d '{
                                            "name": "kanivets_s",
-                                           "version": "1.0.0'",
+                                           "version": "1.0.0",
                                            "description": "exam-project"
                                          }'
                                 '''
