@@ -82,6 +82,7 @@ pipeline {
                                 -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
                                 -F 'projectName=kanivets_s' \
                                 -F 'projectVersion=1.0.0' \
+                                -F 'project=bd056b21-93ad-447e-ba6d-f1104daedfcd' \
                                 -F 'bom=@sbom.json'
                                 '''                            
                             archiveArtifacts artifacts: 'sbom.json', allowEmptyArchive: true
