@@ -45,7 +45,7 @@ pipeline {
                             ls -l
                             find . -name "*.json"
                             '''
-                        archiveArtifacts allowEmptyArchive: true, artifacts: 'trivy.json'
+                        archiveArtifacts allowEmptyArchive: true, artifacts: './trivy.json'
                     }
                 }
                             
