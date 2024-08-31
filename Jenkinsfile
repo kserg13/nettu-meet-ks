@@ -94,24 +94,36 @@ pipeline {
                 // }
                
         
-                stage('VM') {
+                // stage('VM') {
+                //     steps {
+                //         script {
+                //             sh '''
+                //             curl -X 'POST' \
+                //                       'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
+                //                       -H 'accept: application/json' \
+                //                       -H 'Content-Type: multipart/form-data' \
+                //                       -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
+                //                       -F 'active=true' \
+                //                       -F 'verified=true' \
+                //                       -F 'minimum_severity=Medium' \
+                //                       -F 'product_name=kanivets_s' \
+                //                       -F 'file=@k-semgrep.json;type=application/json' \
+                //                       -F 'scan_type=Semgrep JSON Report' \
+                //                '''
+                //         }
+                //     }
+                // }
+
+                stage('VM2') {
                     steps {
                         script {
                             sh '''
-                            curl -X 'POST' \
-                                      'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
-                                      -H 'accept: application/json' \
-                                      -H 'Content-Type: multipart/form-data' \
-                                      -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
-                                      -F 'active=true' \
-                                      -F 'verified=true' \
-                                      -F 'minimum_severity=Medium' \
-                                      -F 'product_name=kanivets_s' \
-                                      -F 'file=@k-semgrep.json;type=application/json' \
-                                      -F 'scan_type=Semgrep JSON Report' \
-                               '''
+                            curl -X 'POST' -kL 'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' -H 'accept: application/json' -H 'X-CSRFTOKEN: sKJFjyoAkK1wUqpb2yPFwoi1JE5CwbR4TvyGwPMsDrKRMLoMlZtnqMn7jTeLv4vE' -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' -H 'Content-Type: multipart/form-data' -F 'active=true' -F 'verified=true' -F'deduplication_on_engagement=true' -F 'minimum_severity=High' -F 'scan_date=2024-08-31' -F 'engagement_end_date=2024-08-31' -F 'group_by=component_name' -F 'tags=' -F 'product_name=ks13' -F 'file=@k-semgrep.json;type=application/json' -F 'auto_create_context=true' -F 'scan_type=Semgrep JSON Report' -F 'engagement=1'
+                            '''
                         }
                     }
                 }
+
+        
     }
 }
