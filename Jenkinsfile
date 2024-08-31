@@ -171,7 +171,7 @@ pipeline {
             // }
 
         stage ('QG2') {
-          agent { label "dind" }
+          agent { label "alpine" }
           steps {
             unstash "reptrivy"
             // unstash "repzap"
