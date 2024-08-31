@@ -19,7 +19,7 @@ pipeline {
         //         archiveArtifacts artifacts: 'k-semgrep.json', allowEmptyArchive: true
         //   }
         // }
-            stage('semgrep') {
+            stage('zap') {
                 agent { label 'alpine' } 
                 steps {
                     sh '''
