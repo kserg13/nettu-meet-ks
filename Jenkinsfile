@@ -40,7 +40,7 @@ pipeline {
                     agent { label 'dind' }
                     steps {
                         sh '''
-                            docker run aquasec/trivy -f json -o /home/jenkins/workspace/skanivets_exam/trivy.json repo https://github.com/kserg13/nettu-meet-ks
+                            docker run aquasec/trivy -f json -o trivy.json repo https://github.com/kserg13/nettu-meet-ks
                             pwd
                             ls -l
                             find . -name "*.json"
