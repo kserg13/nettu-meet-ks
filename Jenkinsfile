@@ -102,40 +102,13 @@ pipeline {
                                       'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
                                       -H 'accept: application/json' \
                                       -H 'Content-Type: multipart/form-data' \
-                                      -H 'X-CSRFTOKEN: xlKPcsKGE3OcopuNWpTOKtfzLIS06FRrKbeiG7FMzOjnVU8tiGWJdmqGewocICl1' \
                                       -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
-                                      -F 'product_type_name=' \
                                       -F 'active=true' \
-                                      -F 'endpoint_to_add=' \
                                       -F 'verified=true' \
-                                      -F 'close_old_findings=' \
-                                      -F 'test_title=' \
-                                      -F 'engagement_name=' \
-                                      -F 'build_id=' \
-                                      -F 'deduplication_on_engagement=' \
-                                      -F 'push_to_jira=' \
                                       -F 'minimum_severity=Medium' \
-                                      -F 'close_old_findings_product_scope=' \
-                                      -F 'apply_tags_to_endpoints=' \
-                                      -F 'scan_date=2024-08-31' \
-                                      -F 'create_finding_groups_for_all_findings=' \
-                                      -F 'engagement_end_date=' \
-                                      -F 'environment=' \
-                                      -F 'service=' \
-                                      -F 'commit_hash=' \
-                                      -F 'group_by=' \
-                                      -F 'version=' \
-                                      -F 'tags=' \
-                                      -F 'apply_tags_to_findings=' \
-                                      -F 'api_scan_configuration=' \
-                                      -F 'product_name=' \
-                                      -F 'file=' \
-                                      -F 'auto_create_context=' \
-                                      -F 'lead=' \
+                                      -F 'product_name=kanivets_s' \
+                                      -F 'file=@k-semgrep.json;type=application/json' \
                                       -F 'scan_type=Semgrep JSON Report' \
-                                      -F 'branch_tag=' \
-                                      -F 'source_code_management_uri=' \
-                                      -F 'engagement='
                                '''
                         }
                     }
