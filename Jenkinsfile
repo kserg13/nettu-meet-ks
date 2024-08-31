@@ -28,6 +28,5 @@ pipeline {
                     // archiveArtifacts artifacts: 'zapout.json', allowEmptyArchive: true, caseSensitive: false, defaultExcludes: false, followSymlinks: false
                 }
             }
-        }
     }
 }
