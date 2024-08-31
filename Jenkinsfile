@@ -71,7 +71,7 @@ pipeline {
                             -F 'verified=true' \
                             -F 'minimum_severity=Info' \
                             -F 'product_name=skanivets' \
-                            -F 'file=@/test/trivyout.json;type=application/json' \
+                            -F 'file=@test/trivyout.json;type=application/json' \
                             -F 'auto_create_context=true' \
                             -F 'scan_type=Trivy Operator Scan' \
                        '''
