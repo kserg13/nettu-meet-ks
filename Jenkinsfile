@@ -41,7 +41,7 @@ pipeline {
                     steps {
                         sh '''
                             mkdir report/
-                            //docker run aquasec/trivy repo -f json -o results.json https://github.com/kserg13/nettu-meet-ks
+                            // docker run aquasec/trivy repo -f json -o results.json https://github.com/kserg13/nettu-meet-ks
                             docker run -v ./report:/report aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /report/trivy.json
                             pwd
                             ls -l
