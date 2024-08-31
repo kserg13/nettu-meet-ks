@@ -73,7 +73,7 @@ pipeline {
                             -F 'product_name=skanivets' \
                             -F 'file=@trivyout.json;type=application/json' \
                             -F 'auto_create_context=true' \
-                            -F 'scan_type=Trivy Scan' \
+                            -F 'scan_type=Trivy Operator Scan' \
                        '''
                       archiveArtifacts allowEmptyArchive: true, artifacts: 'test/trivyout.json', caseSensitive: false, defaultExcludes: false, followSymlinks: false
                     }
