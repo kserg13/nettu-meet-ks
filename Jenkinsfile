@@ -75,6 +75,15 @@ pipeline {
                             //     -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
                             //     -d @sbom.json
                             //     '''
+                            sh '''
+                                curl -k -X 'POST' 'https://s410-exam.cyber-ed.space:8081/api/v1/bom' \
+                                -H 'accept: application/json' \
+                                -H 'Content-Type: multipart/form-data'\
+                                -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
+                                -F 'projectName=kanivets_s' \
+                                -F 'projectVersion=1.0.0' \
+                                -F 'bom=@sbom.json'
+                                '''                            
                             archiveArtifacts artifacts: 'sbom.json', allowEmptyArchive: true
                         }
                     }
