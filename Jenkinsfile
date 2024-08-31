@@ -72,9 +72,6 @@ pipeline {
                                 curl -k -X 'PUT' 'https://s410-exam.cyber-ed.space:8081/api/v1/bom' \
                                 -H 'Content-Type: application/json'\
                                 -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
-                                // -F 'autoCreate=true' \
-                                // -F 'projectName='kanivets_s'' \
-                                // -F 'projectVersion='1.0.0'' \
                                 -d @sbom.json
                                 '''
                             archiveArtifacts artifacts: 'sbom.json', allowEmptyArchive: true
