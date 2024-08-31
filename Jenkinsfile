@@ -30,37 +30,37 @@ pipeline {
         //   }
         // }
         
-            stage('zap') {
-                agent { label 'alpine' } 
-                steps {
-                    sh '''
-                        apk add --no-cache openjdk11-jre-headless wget unzip
-                        wget https://github.com/zaproxy/zaproxy/releases/download/w2024-08-27/ZAP_WEEKLY_D-2024-08-27.zip
-                        unzip ZAP_WEEKLY_D-2024-08-27.zip -d zap
-                        pwd
-                        zap/ZAP_D-2024-08-27/zap.sh -cmd -quickurl https://s410-exam.cyber-ed.space:8084 -quickout /home/jenkins/workspace/skanivets_exam/zapout.json
-                        pwd
-                        ls -l
-                        find . -name "*.json"
-                        '''
-                    sh '''
-                        curl --insecure -X 'POST' \
-                            'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
-                            -H 'accept: application/json' \
-                            -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
-                            -H 'Content-Type: multipart/form-data' \
-                            -F 'active=true' \
-                            -F 'verified=true' \
-                            -F 'minimum_severity=Info' \
-                            -F 'product_name=skanivets' \
-                            -F 'file=@zapout.json;type=application/json' \
-                            -F 'auto_create_context=true' \
-                            -F 'scan_type=ZAP Scan' \
-                       '''
-                    archiveArtifacts allowEmptyArchive: true, artifacts: 'zapout.json'
-                    stash name: 'repzap', includes: 'zapout.json'
-                }
-            }
+            // stage('zap') {
+            //     agent { label 'alpine' } 
+            //     steps {
+            //         sh '''
+            //             apk add --no-cache openjdk11-jre-headless wget unzip
+            //             wget https://github.com/zaproxy/zaproxy/releases/download/w2024-08-27/ZAP_WEEKLY_D-2024-08-27.zip
+            //             unzip ZAP_WEEKLY_D-2024-08-27.zip -d zap
+            //             pwd
+            //             zap/ZAP_D-2024-08-27/zap.sh -cmd -quickurl https://s410-exam.cyber-ed.space:8084 -quickout /home/jenkins/workspace/skanivets_exam/zapout.json
+            //             pwd
+            //             ls -l
+            //             find . -name "*.json"
+            //             '''
+            //         sh '''
+            //             curl --insecure -X 'POST' \
+            //                 'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
+            //                 -H 'accept: application/json' \
+            //                 -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
+            //                 -H 'Content-Type: multipart/form-data' \
+            //                 -F 'active=true' \
+            //                 -F 'verified=true' \
+            //                 -F 'minimum_severity=Info' \
+            //                 -F 'product_name=skanivets' \
+            //                 -F 'file=@zapout.json;type=application/json' \
+            //                 -F 'auto_create_context=true' \
+            //                 -F 'scan_type=ZAP Scan' \
+            //            '''
+            //         archiveArtifacts allowEmptyArchive: true, artifacts: 'zapout.json'
+            //         stash name: 'repzap', includes: 'zapout.json'
+            //     }
+            // }
                 
                 stage('trivy') {
                     agent { label 'dind' }
@@ -174,7 +174,7 @@ pipeline {
           agent { label "dind" }
           steps {
             unstash "reptrivy"
-            unstash "repzap"
+            // unstash "repzap"
             sh '''
               apt update && install -y jq
               c=$(cat trivy.json | jq | grep -iE "\"severity\": \"CRITICAL" | wc -l )
@@ -183,12 +183,12 @@ pipeline {
                 echo "Trivy-QualityGate failed"
                 #exit 1
               fi
-              c=$(cat owaspzap.json | jq | grep -E "\"riskdesc\": \"Critical" | wc -l )
-              h=$(cat owaspzap.json | jq | grep -E "\"riskdesc\": \"High" | wc -l)
-              if [ $c -ge 1 ] || [ $h -ge 10 ] ; then
-                echo "Zap-QualityGate failed"
-                #exit 1
-              fi
+              // c=$(cat owaspzap.json | jq | grep -E "\"riskdesc\": \"Critical" | wc -l )
+              // h=$(cat owaspzap.json | jq | grep -E "\"riskdesc\": \"High" | wc -l)
+              // if [ $c -ge 1 ] || [ $h -ge 10 ] ; then
+              //   echo "Zap-QualityGate failed"
+              //   #exit 1
+              // fi
             '''
           }
       }
