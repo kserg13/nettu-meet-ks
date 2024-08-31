@@ -41,7 +41,7 @@ pipeline {
                     steps {
                         sh '''
                             mkdir report/
-                            docker run aquasec/trivy --format json --output /report/trivyout.json repo https://github.com/kserg13/nettu-meet-ks
+                            docker run aquasec/trivy --format json --output trivyout.json repo https://github.com/kserg13/nettu-meet-ks
                             pwd
                             ls -l
                             find . -name "*.json"
