@@ -60,12 +60,13 @@ pipeline {
                             '''
                             sh '''
                                 curl -k -X 'PUT' 'https://s410-exam.cyber-ed.space:8081/api/v1/project' \
-                                     -H 'Content-Type: application/json' \
+                                     -H 'accept: application/json' \
                                      -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
+                                     -H 'Content-Type: application/json' \
                                      -d '{
-                                           'name: kanivets_s',
-                                           'version: 1.0.0',
-                                           'description: exam-project'
+                                           "name": "kanivets_s",
+                                           "version": "1.0.0'",
+                                           "description": "exam-project"
                                          }'
                                 '''
                             // sh '''
