@@ -42,7 +42,7 @@ pipeline {
                         sh '''
                             mkdir report/
                             docker pull aquasec/trivy:latest
-                            docker run -v /test:/test aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /test/trivy.json
+                            docker run --rm -v $(pwd):/test aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /test/trivy.json
                             pwd
                             ls -l
                             find . -name "*.json"
