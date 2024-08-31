@@ -84,7 +84,14 @@ pipeline {
                                 -F 'projectVersion=1.0.0' \
                                 -F 'project=bd056b21-93ad-447e-ba6d-f1104daedfcd' \
                                 -F 'bom=@sbom.json'
-                                '''                            
+                                '''
+                            sh '''
+                                curl -k -X 'GET' 'https://s410-exam.cyber-ed.space:8081/api/v1/finding/project/bd056b21-93ad-447e-ba6d-f1104daedfcd' \
+                                -H 'accept: application/json' \
+                                -H 'X-API-Key: odt_SfCq7Csub3peq7Y6lSlQy5Ngp9sSYpJl' \
+                                -H 'Content-Type: application/json' \
+                                -o vulners.json
+                                '''
                             archiveArtifacts artifacts: 'sbom.json', allowEmptyArchive: true
                         }
                     }
