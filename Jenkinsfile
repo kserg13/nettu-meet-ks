@@ -7,8 +7,10 @@ pipeline {
             }
         }
         stage('semgrep') {
+            agent { label 'alpine' } 
             steps {
                 sh '''
+                    apk add --no-cache python3 py3-pip
                     pip3 install semgrep
                     semgrep --config=auto . --json > k-semgrep.json
                 '''
