@@ -34,34 +34,20 @@ pipeline {
         //   }
         // }
         
-            // stage('zap') {
-            //     agent { label 'alpine' } 
-            //     steps {
-            //         sh '''
-            //             apk add --no-cache openjdk11-jre-headless wget unzip
-            //             wget https://github.com/zaproxy/zaproxy/releases/download/w2024-08-27/ZAP_WEEKLY_D-2024-08-27.zip
-            //             unzip ZAP_WEEKLY_D-2024-08-27.zip -d zap
-            //             pwd
-            //             zap/ZAP_D-2024-08-27/zap.sh -cmd -quickurl https://s410-exam.cyber-ed.space:8084 -quickout /home/jenkins/workspace/skanivets_exam/zapout.json
-            //             pwd
-            //             ls -l
-            //             find . -name "*.json"
-            //             '''
-            //         archiveArtifacts allowEmptyArchive: true, artifacts: 'zapout.json'
-            //     }
-            // }
-                stage('trivy') {
-                    agent { label 'dind' }
-                    steps {
-                        sh '''
-                            mkdir report/
-                            docker pull aquasec/trivy:latest
-                            docker run -v ./test:/test aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /test/trivyout.json
-                            pwd
-                            ls -l
-                            find . -name "*.json"
-                            '''
-                            sh '''
+            stage('zap') {
+                agent { label 'alpine' } 
+                steps {
+                    sh '''
+                        apk add --no-cache openjdk11-jre-headless wget unzip
+                        wget https://github.com/zaproxy/zaproxy/releases/download/w2024-08-27/ZAP_WEEKLY_D-2024-08-27.zip
+                        unzip ZAP_WEEKLY_D-2024-08-27.zip -d zap
+                        pwd
+                        zap/ZAP_D-2024-08-27/zap.sh -cmd -quickurl https://s410-exam.cyber-ed.space:8084 -quickout /home/jenkins/workspace/skanivets_exam/zapout.json
+                        pwd
+                        ls -l
+                        find . -name "*.json"
+                        '''
+                    sh '''
                         curl --insecure -X 'POST' \
                             'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
                             -H 'accept: application/json' \
@@ -71,13 +57,41 @@ pipeline {
                             -F 'verified=true' \
                             -F 'minimum_severity=Info' \
                             -F 'product_name=skanivets' \
-                            -F 'file=@test/trivyout.json;type=application/json' \
+                            -F 'file=@zapout.json;type=application/json' \
                             -F 'auto_create_context=true' \
-                            -F 'scan_type=Trivy Operator Scan' \
+                            -F 'scan_type=ZAP Scan' \
                        '''
-                      archiveArtifacts allowEmptyArchive: true, artifacts: 'test/trivyout.json', caseSensitive: false, defaultExcludes: false, followSymlinks: false
-                    }
+                    archiveArtifacts allowEmptyArchive: true, artifacts: 'zapout.json'
                 }
+            }
+                // stage('trivy') {
+                //     agent { label 'dind' }
+                //     steps {
+                //         sh '''
+                //             mkdir report/
+                //             docker pull aquasec/trivy:latest
+                //             docker run -v ./test:/test aquasec/trivy repo https://github.com/kserg13/nettu-meet-ks -f json -o /test/trivyout.json
+                //             pwd
+                //             ls -l
+                //             find . -name "*.json"
+                //             '''
+                //             sh '''
+                //         curl --insecure -X 'POST' \
+                //             'https://s410-exam.cyber-ed.space:8083/api/v2/import-scan/' \
+                //             -H 'accept: application/json' \
+                //             -H 'Authorization: Token c5b50032ffd2e0aa02e2ff56ac23f0e350af75b4' \
+                //             -H 'Content-Type: multipart/form-data' \
+                //             -F 'active=true' \
+                //             -F 'verified=true' \
+                //             -F 'minimum_severity=Info' \
+                //             -F 'product_name=skanivets' \
+                //             -F 'file=@test/trivyout.json;type=application/json' \
+                //             -F 'auto_create_context=true' \
+                //             -F 'scan_type=Trivy Operator Scan' \
+                //        '''
+                //       archiveArtifacts allowEmptyArchive: true, artifacts: 'test/trivyout.json', caseSensitive: false, defaultExcludes: false, followSymlinks: false
+                //     }
+                // }
 
         
                 // stage('DT') {
